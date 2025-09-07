@@ -142,6 +142,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
+
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
