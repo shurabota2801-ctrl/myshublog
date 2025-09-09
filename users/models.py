@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     bio = models.TextField(max_length=500, blank=True, null=True, verbose_name='О себе')
     avatar = models.ImageField(upload_to='profile/avatars/%Y/%m/%d/', blank=True, null=True, verbose_name='Аватар')
-    created_at = models.ImageField(auto_now_add=True, verbose_name='Создан')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
     
     class Meta:
         verbose_name = 'Профиль'
