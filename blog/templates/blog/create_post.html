@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Создание поста{% endblock %}
+
+{% block extra_head %}
+<!-- ОБЯЗАТЕЛЬНО подключаем медиа формы -->
+{{ form.media }}
+<style>
+    .django-ckeditor-5 {
+        width: 100% !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 0.375rem !important;
+    }
+    .ck.ck-editor {
+        width: 100% !important;
+    }
+    .ck-editor__editable {
+        min-height: 300px !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="fas fa-plus"></i> Создание нового поста</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Поле заголовка -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Заголовок *</label>
+                            {{ form.title }}
+                        </div>
+
+                        <!-- Поле категории -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Категория</label>
+                            {{ form.category }}
+                        </div>
+
+                        <!-- ПОЛЕ СОДЕРЖАНИЯ - CKEditor 5 -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Содержание *</label>
+                            {{ form.content }}
+                        </div>
+
+                        <!-- Поле изображения -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Изображение</label>
+                            {{ form.image }}
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-paper-plane"></i> Опубликовать пост
+                        </button>
+                            <a href="{% url 'blog:index' %}" class="btn btn-outline-secondary w-100 mt-2">
+                                <i class="fas fa-times"></i> Отмена
+                            </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

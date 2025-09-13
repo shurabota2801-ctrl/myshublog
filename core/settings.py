@@ -159,6 +159,8 @@ INTERNAL_IPS = [
 
 CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link', 
+                   'bulletedList', 'numberedList', 'blockQuote',
+                   'imageUpload', 'undo', 'redo'],
     },
 }

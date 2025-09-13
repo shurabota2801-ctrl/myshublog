@@ -1,0 +1,18 @@
+from django import forms
+from .models import Post, Category
+from django_ckeditor_5.widgets import CKEditor5Widget
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'category', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите заголовок поста'}), 
+            'content': CKEditor5Widget(attrs={'class': 'django_ckeditor_5'}, config_name='default'), 
+            'category': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.all()
+        self.fields['category'].empty_label = 'Выберите категорию'

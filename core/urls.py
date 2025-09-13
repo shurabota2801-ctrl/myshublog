@@ -22,9 +22,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
+    path('blog/', include('blog.urls')), 
+    path('users/', include('users.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
-    path('users/', include('users.urls'))
 ]
 
 if settings.DEBUG:
