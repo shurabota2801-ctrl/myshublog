@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'blog:index' %}">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'blog:index' %}">Все посты</a></li>
+                    <li class="breadcrumb-item active">{{ post.title|truncatewords:4 }}</li>
+                </ol>
+            </nav>
+
+            <!-- Пост -->
+            <article class="card shadow-sm mb-5">
+                <!-- Изображение поста -->
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" 
+                     style="max-height: 500px; object-fit: cover; width: 100%;">
+                {% endif %}
+                
+                <div class="card-body">
+                    <!-- Категория -->
+                    {% if post.category %}
+                    <span class="badge bg-primary mb-3">{{ post.category.name }}</span>
+                    {% endif %}
+
+                    <!-- Заголовок -->
+                    <h1 class="card-title h2 mb-3">{{ post.title }}</h1>
+
+                    <!-- Мета-информация -->
+                    <div class="d-flex justify-content-between align-items-center mb-4 text-muted">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user me-2"></i>
+                            <span>{{ post.author.username }}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-calendar me-2"></i>
+                            <span>{{ post.created_at|date:"d.m.Y H:i" }}</span>
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-eye me-2"></i>
+                            <span>{{ post.views }} просмотров</span>
+                        </div>
+                    </div>
+
+                    <!-- Содержание поста -->
+                    <div class="post-content mb-4">
+                        {{ post.content|safe }}
+                    </div>
+
+                    <!-- Статус поста -->
+                    <div class="border-top pt-3">
+                        <small class="text-muted">
+                            Статус: 
+                            <span class="badge 
+                                {% if post.status == 'published' %}bg-success
+                                {% elif post.status == 'pending' %}bg-warning
+                                {% else %}bg-secondary{% endif %}">
+                                {{ post.get_status_display }}
+                            </span>
+                        </small>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Кнопки навигации -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Назад к списку постов
+                </a>
+                
+                {% if user.is_authenticated and user == post.author %}
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline-secondary">
+                        <i class="fas fa-edit me-2"></i>Редактировать
+                    </a>
+                    <a href="#" class="btn btn-outline-danger">
+                        <i class="fas fa-trash me-2"></i>Удалить
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Блок "Понравилось?" -->
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Понравился пост?</h5>
+                    <p class="card-text">Оставьте комментарий или поделитесь с друзьями!</p>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-heart me-2"></i>Нравится
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="fas fa-share-alt me-2"></i>Поделиться
+                        </button>
+                        <button class="btn btn-outline-info">
+                            <i class="fas fa-comment me-2"></i>Комментировать
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

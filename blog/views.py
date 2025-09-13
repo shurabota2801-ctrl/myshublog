@@ -38,7 +38,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             if request.user.is_staff or request.user.is_superuser:
-                post.status = 'Published'
+                post.status = 'published'
                 message = 'Пост успешно опубликован!'
             else:
                 post.status = 'pending'
@@ -46,7 +46,7 @@ def create_post(request):
             
             post.save()
             messages.success(request, message)
-            return redirect('blog:post_detail', post_id=post.id)
+            return redirect('blog:index')
     else:
         form = PostForm()
     
