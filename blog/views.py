@@ -46,7 +46,7 @@ def create_post(request):
             
             post.save()
             messages.success(request, message)
-            return redirect('blog:index')
+            return redirect('home')
     else:
         form = PostForm()
     
