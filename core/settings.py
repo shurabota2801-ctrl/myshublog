@@ -148,7 +148,10 @@ CKEDITOR_IMAGE_BACKEND = 'pillow'
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Куда перенаправлять после входа
-LOGIN_REDIRECT_URL = 'home'  # или 'blog:index'
+LOGIN_REDIRECT_URL = 'home'
+
+# Куда перенаправлять после выхода
+LOGOUT_REDIRECT_URL = 'users:logout' 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
