@@ -3,6 +3,8 @@ from blog.models import Post, Category
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import PostForm
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 def index(request):
     latest_posts = Post.objects.filter(
@@ -95,3 +97,27 @@ def delete_post(request, post_id):
         return redirect('home')
     
     return render(request, 'blog/delete_post.html', {'post': post})
+
+def post_list(request):
+    posts = Post.objects.filter(status='published').select_related('author', 'category').order_by('-created_at')
+    
+    search_query = request.GET.get('q') 
+    if search_query:
+        posts = posts.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+    
+    category_slug = request.GET.get('category')
+    if category_slug:
+        posts = posts.filter(category__slug=category_slug)
+
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_posts = paginator.get_page(page_number)
+
+    categories = Category.objects.all()
+
+    context = {
+        'posts': page_posts,
+        'categories': categories,
+    }
+
+    return render(request, 'blog/post_list.html', context)
