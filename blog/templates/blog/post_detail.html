@@ -75,10 +75,10 @@
                 
                 {% if user.is_authenticated and user == post.author %}
                 <div class="btn-group">
-                    <a href="#" class="btn btn-outline-secondary">
+                    <a href="{% url 'blog:edit_post' post.id %}" class="btn btn-outline-secondary">
                         <i class="fas fa-edit me-2"></i>Редактировать
                     </a>
-                    <a href="#" class="btn btn-outline-danger">
+                    <a href="{% url 'blog:delete_post' post.id %}" class="btn btn-outline-danger">
                         <i class="fas fa-trash me-2"></i>Удалить
                     </a>
                 </div>

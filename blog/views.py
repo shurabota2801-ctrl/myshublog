@@ -55,3 +55,43 @@ def create_post(request):
         'title': 'Создание нового поста'
     }
     return render(request, 'blog/create_post.html', context)
+        
+@login_required
+@login_required
+def edit_post(request, post_id):
+    # Получаем пост из базы данных
+    post = get_object_or_404(Post, id=post_id)
+    
+    # Проверяем права доступа
+    if post.author != request.user:
+        messages.error(request, 'Вы не можете редактировать этот пост!')
+        return redirect('blog:post_detail', post_id=post.id)  # ← ИМЯ МАРШРУТА, а не шаблона
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            updated_post = form.save(commit=False)
+            updated_post.author = request.user
+            updated_post.save()
+            messages.success(request, 'Пост успешно обновлен!')
+            return redirect('blog:post_detail', post_id=post.id)  # ← ИМЯ МАРШРУТА
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
+    else:
+        form = PostForm(instance=post)
+    
+    return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.author != request.user:
+        messages.error(request, 'Вы не можете удалить этот пост!')
+        return redirect('post_detail', post_id=post.id)
+    
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, 'Пост успешно удален!')
+        return redirect('home')
+    
+    return render(request, 'blog/delete_post.html', {'post': post})

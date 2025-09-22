@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Удаление поста{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'blog:post_detail' post.id %}">{{ post.title|truncatewords:4 }}</a></li>
+                    <li class="breadcrumb-item active">Удаление</li>
+                </ol>
+            </nav>
+
+            <!-- Заголовок -->
+            <div class="card shadow-sm mb-4 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="card-title h4 mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Подтверждение удаления
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Сообщение о подтверждении -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">Внимание!</h4>
+                        <p>Вы собираетесь удалить пост: <strong>"{{ post.title }}"</strong></p>
+                        <p class="mb-0">Это действие нельзя отменить. Все данные будут безвозвратно удалены.</p>
+                    </div>
+
+                    <!-- Информация о посте -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Информация о посте:</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-user me-2"></i>Автор: {{ post.author.username }}
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-calendar me-2"></i>Создан: {{ post.created_at|date:"d.m.Y H:i" }}
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-eye me-2"></i>Просмотров: {{ post.views }}
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-tag me-2"></i>Статус: 
+                                    <span class="badge 
+                                        {% if post.status == 'published' %}bg-success
+                                        {% elif post.status == 'pending' %}bg-warning
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ post.get_status_display }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Форма удаления -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Да, удалить пост
+                            </button>
+                            <a href="{% url 'blog:post_detail' post.id %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
