@@ -104,10 +104,10 @@ def post_list(request):
     search_query = request.GET.get('q') 
     if search_query:
         posts = posts.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
-    
-    category_slug = request.GET.get('category')
-    if category_slug:
-        posts = posts.filter(category__slug=category_slug)
+
+    category_id = request.GET.get('category')
+    if category_id:
+        posts = posts.filter(category__id=category_id)
 
     paginator = Paginator(posts, 5)
     page_number = request.GET.get('page')

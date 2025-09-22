@@ -22,8 +22,8 @@
                     <select name="category" class="form-select">
                         <option value="">Все категории</option>
                         {% for category in categories %}
-                        <option value="{{ category.slug }}" 
-                                {% if request.GET.category == category.slug %}selected{% endif %}>
+                        <option value="{{ category.id }}" 
+                                {% if request.GET.category == category.id|stringformat:"i" %}selected{% endif %}>
                             {{ category.name }}
                         </option>
                         {% endfor %}
@@ -58,7 +58,10 @@
                         {{ post.title }}
                     </a>
                 </h5>
-                
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}" 
+                    style="height: 300px; object-fit: cover;">
+                {% endif %}
                 <!-- Информация о посте -->
                 <div class="text-muted small mb-2">
                     <!-- Автор и дата -->
