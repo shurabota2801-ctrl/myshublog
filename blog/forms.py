@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post, Category
+from .models import Post, Category, Comment
 from django_ckeditor_5.widgets import CKEditor5Widget
 
 class PostForm(forms.ModelForm):
@@ -16,3 +16,15 @@ class PostForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.all()
         self.fields['category'].empty_label = 'Выберите категорию'
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Введите ваш комментарий...'
+            })
+        }

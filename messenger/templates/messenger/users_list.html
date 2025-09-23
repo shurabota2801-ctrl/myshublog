@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">👥 Выберите пользователя для диалога</h4>
+                    <a href="{% url 'messenger:messenger_home' %}" class="btn btn-outline-secondary btn-sm">
+                        ← Назад к диалогам
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Поиск пользователей -->
+                    <div class="mb-4">
+                        <input type="text" id="userSearch" class="form-control" placeholder="🔍 Поиск пользователей...">
+                    </div>
+                    
+                    <!-- Список пользователей -->
+                    <div class="list-group">
+                        {% for user in users %}
+                            <a href="{% url 'messenger:start_thread' user.id %}" 
+                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center user-item">
+                                <div>
+                                    <strong>{{ user.username }}</strong>
+                                    {% if user.first_name or user.last_name %}
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ user.first_name }} {{ user.last_name }}
+                                        </small>
+                                    {% endif %}
+                                    <br>
+                                    <small class="text-muted">
+                                        Зарегистрирован: {{ user.date_joined|date:"d.m.Y" }}
+                                    </small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">💬 Написать</span>
+                            </a>
+                        {% empty %}
+                            <div class="text-center text-muted py-4">
+                                <h5>👥</h5>
+                                <p>Нет других пользователей для общения</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Поиск пользователей
+document.getElementById('userSearch').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const userItems = document.querySelectorAll('.user-item');
+    
+    userItems.forEach(function(item) {
+        const username = item.querySelector('strong').textContent.toLowerCase();
+        const fullName = item.textContent.toLowerCase();
+        
+        if (username.includes(searchTerm) || fullName.includes(searchTerm)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+</script>
+
+<style>
+.user-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+    transition: all 0.2s ease;
+}
+</style>
+{% endblock %}

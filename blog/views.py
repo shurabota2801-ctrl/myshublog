@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from blog.models import Post, Category
+from blog.models import Post, Category, Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from django.db.models import Q
 from django.core.paginator import Paginator
 
@@ -121,3 +121,21 @@ def post_list(request):
     }
 
     return render(request, 'blog/post_list.html', context)
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            messages.success(request, 'Ваш комментарий был успешно добавлен!')
+            return redirect('blog:post_detail', post_id=post.id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'blog/add_comment.html', {"form": form, 'post': post})

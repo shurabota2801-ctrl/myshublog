@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить комментарий к "{{ post.title }}"{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-comment me-2"></i>
+                        Добавить комментарий
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Информация о посте -->
+                    <div class="mb-4 p-3 bg-light rounded">
+                        <h5>К посту: "{{ post.title }}"</h5>
+                        <small class="text-muted">
+                            Автор: {{ post.author.username }} | 
+                            Дата: {{ post.created_at|date:"d.m.Y H:i" }}
+                        </small>
+                    </div>
+
+                    <!-- Форма комментария -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.content.id_for_label }}" class="form-label">
+                                {{ form.content.label }}
+                            </label>
+                            {{ form.content }}
+                            {% if form.content.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.content.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Максимальная длина: 2000 символов. Осталось: <span id="char-count">2000</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'blog:post_detail' post.id %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Назад к посту
+                            </a>
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Отправить комментарий
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Счетчик символов
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('{{ form.content.id_for_label }}');
+    const charCount = document.getElementById('char-count');
+    
+    textarea.addEventListener('input', function() {
+        const remaining = 2000 - this.value.length;
+        charCount.textContent = remaining;
+        
+        if (remaining < 0) {
+            charCount.classList.add('text-danger');
+        } else {
+            charCount.classList.remove('text-danger');
+        }
+    });
+});
+</script>
+{% endblock %}

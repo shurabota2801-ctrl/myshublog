@@ -41,8 +41,8 @@
             <div class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <span class="navbar-text me-3">Привет, {{ user.username }}!</span>
+                    <a class="btn-link" href="{% url 'messenger:messenger_home' %}">Чат</a>
                     <a class="btn-link" href="{% url 'blog:post_list' %}">Мой профиль</a>
-
                     <form method="post" action="{% url 'users:logout' %}">
                         {% csrf_token %}
                         <button type="submit" class="btn-link">Выйти</button>
