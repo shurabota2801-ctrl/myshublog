@@ -89,21 +89,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     
-    '''
-    'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-        'OPTIONS': {
-            'connect_timeout': 30,
-        }
-    }
-    '''
+    
+    #'default': {
+    #    'ENGINE': env('DB_ENGINE'),
+    #    'NAME': env('DB_NAME'),
+    #    'USER': env('DB_USER'),
+    #    'PASSWORD': env('DB_PASSWORD'),
+    #    'HOST': env('DB_HOST'),
+    #    'PORT': env('DB_PORT'),
+    #    'OPTIONS': {
+    #        'connect_timeout': 30,
+    #    }
+    #}
+    
     'default': dj_database_url.config(
-        default=env('DATABASE_URL', default='sqlite:///db.sqlite3'),
+        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
         conn_max_age=600,
         conn_health_checks=True,
     )
